@@ -1,0 +1,9 @@
+tornado
+zmq
+redis
+supervisor
+protobuf
+requests
+chardet
+DBUtils
+Crypto
