@@ -87,19 +87,8 @@ def saveUserInfo(userInfo):
         userId = kjs['userId']
         user = DataManager().getUser(userId)
         if user is not None:
-            uid = user.uid
-            sessionKey = user.session_key
-            encryptedData = kjs['encryptedData']
-            iv = kjs['iv']
-            #解析数据
-            wxdc = WXBizDataCrypt(APPID, sessionKey)
-            data = wxdc.decrypt(encryptedData, iv)
-            if data['openId'] != uid:
-                log().error("saveUserInfo error! uid not the same! [{0} - {1}]".format(uid, data['openId']))
-            else:
-                user = User(userId, uid, sessionKey)
-                user.setUserInfo(kjs['rawData'])
-                DataManager().updateUser(user)
+            user.setUserInfo(kjs['rawData'])
+            DataManager().updateUser(user)
         else:
             log().error("saveUserInfo error! user is None! [{0}]".format(userId))
 
