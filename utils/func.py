@@ -8,6 +8,7 @@ from utils.log import log
 from utils.WXBizDataCrypt import WXBizDataCrypt
 from config import *
 from manager.dataManager import DataManager
+from models.user import User
 
 def _getWuliu_(url):
     res = rs.get(url)
@@ -81,7 +82,26 @@ def findDetailsByGuid(guid):
         return kjs
 
 def saveUserInfo(userInfo):
-    pass
+    kjs = json.loads(userInfo)
+    if 'userId' in kjs:
+        userId = kjs['userId']
+        user = DataManager().getUser(userId)
+        if user is not None:
+            uid = user.uid
+            sessionKey = user.session_key
+            encryptedData = kjs['encryptedData']
+            iv = kjs['iv']
+            #解析数据
+            wxdc = WXBizDataCrypt(APPID, sessionKey)
+            data = wxdc.decrypt(encryptedData, iv)
+            if data['openId'] != uid:
+                log().error("saveUserInfo error! uid not the same! [{0} - {1}]".format(uid, data['openId']))
+            else:
+                user = User(userId, uid, sessionKey)
+                user.setUserInfo(kjs['rawData'])
+                DataManager().updateUser(user)
+        else:
+            log().error("saveUserInfo error! user is None! [{0}]".format(userId))
 
 def getUserInfo(code):
     url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code".format(
@@ -89,10 +109,19 @@ def getUserInfo(code):
         SECRET_KEY,
         code
     )
-    kres = rs.get(url, verify=False)
-    kjs = json.load(kres.text)
-    if kjs['errcode'] is None:
-        openid = kjs['openid']
-        session_key = kjs['session_key']
-    else:
-        print "get user info fail " + kjs['errcode']
+    res = None
+    try:
+        kres = rs.get(url, verify=False)
+        kjs = kres.json()
+        if "errcode" not in kjs:
+            openid = kjs['openid']
+            session_key = kjs['session_key']
+            user = DataManager().addUser(openid, session_key)
+            res = user.userId
+        else:
+            print "get user info fail " + kjs['errcode']
+    except:
+        import traceback
+        print traceback.print_exc()
+    finally:
+        return res

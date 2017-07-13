@@ -2,8 +2,8 @@
 # Author: pengz
 # Email: pch987.net@163.com
 
-import MySQLdb
-from DBUtils.PooledDB import PooledDB
+# import MySQLdb
+# from DBUtils.PooledDB import PooledDB
 from utils.singleton import Singleton
 from utils.log import log
 from config import *
@@ -18,47 +18,51 @@ class Db_Mysql():
     cur = None
 
     def __init__(self):
-        self.pool = PooledDB(
-            MySQLdb,
-            DB_MINCONNUM,
-            host=DB_HOST,
-            port=DB_PORT,
-            user=DB_USER,
-            passwd=DB_PASSWD,
-            db=DB_NAME,
-        )
+        # self.pool = PooledDB(
+        #     MySQLdb,
+        #     DB_MINCONNUM,
+        #     host=DB_HOST,
+        #     port=DB_PORT,
+        #     user=DB_USER,
+        #     passwd=DB_PASSWD,
+        #     db=DB_NAME,
+        # )
+        pass
 
     def query(self, sql):
-        res = None
-        try:
-            self.conn = self.pool.connection()
-            self.cur = self.conn.cursor()
-            self.cur.execute(sql)
-            res = self.cur.fetchall()
-            self.cur.close()
-            self.conn.close()
-        except:
-            import traceback
-            log().error(traceback.print_exc())
-        finally:
-            return res
+        # res = None
+        # try:
+        #     self.conn = self.pool.connection()
+        #     self.cur = self.conn.cursor()
+        #     self.cur.execute(sql)
+        #     res = self.cur.fetchall()
+        #     self.cur.close()
+        #     self.conn.close()
+        # except:
+        #     import traceback
+        #     log().error(traceback.print_exc())
+        # finally:
+        #     return res
+        return None
 
     def execSql(self, sql):
-        res = None
-        try:
-            self.conn = self.pool.connection()
-            self.cur = self.conn.cursor()
-            res = self.cur.execute(sql)
-            self.conn.commit()
-            self.cur.close()
-            self.conn.close()
-        except:
-            import traceback
-            log().error(traceback.print_exc())
-        finally:
-            return res
+        # res = None
+        # try:
+        #     self.conn = self.pool.connection()
+        #     self.cur = self.conn.cursor()
+        #     res = self.cur.execute(sql)
+        #     self.conn.commit()
+        #     self.cur.close()
+        #     self.conn.close()
+        # except:
+        #     import traceback
+        #     log().error(traceback.print_exc())
+        # finally:
+        #     return res
+        return True
 
     def close(self):
-        if self.pool is not None:
-            self.pool.close()
-            self.pool = None
+        # if self.pool is not None:
+        #     self.pool.close()
+        #     self.pool = None
+        pass

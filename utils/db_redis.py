@@ -19,3 +19,6 @@ class Db_Redis():
 
     def set(self, key, value):
         self.instance.set(key, value)
+
+    def getNo(self):
+        return self.instance.incr("inc_no")

@@ -12,25 +12,25 @@ class User(RequestHandler):
 
     def post(self, *args, **kwargs):
         try:
-            code = self.get_argument("code")
-            if code is not None:
-                self.deal_ex(code)
+            _type = self.get_argument("type")
+            if int(_type) == 1:
+                self.deal_ex(self.get_argument("code"))
             else:
-                userInfo = self.get_argument("uinfo")
-                self.deal(userInfo)
+                self.deal(self.get_argument("uinfo"))
         except:
             self.write(self.tip)
 
     def get(self, *args, **kwargs):
         try:
-            code = self.get_argument("code")
-            if code is not None:
-                self.deal_ex(code)
+            _type = self.get_argument("type")
+            if int(_type) == 1:
+                self.deal_ex(self.get_argument("code"))
             else:
-                userInfo = self.get_argument("uinfo")
-                self.deal(userInfo)
+                self.deal(self.get_argument("uinfo"))
         except:
             self.write(self.tip)
+            import traceback
+            print traceback.print_exc()
 
     def deal(self, userInfo):
         if userInfo is not None:

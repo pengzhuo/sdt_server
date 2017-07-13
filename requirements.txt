@@ -4,6 +4,5 @@ redis
 supervisor
 protobuf
 requests
-chardet
-DBUtils
-Crypto
+pycrypto
+ndg-httpsclient
