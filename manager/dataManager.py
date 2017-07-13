@@ -36,6 +36,8 @@ class DataManager():
             userId = self.db_redis.get(indexId)
             userStr = self.db_redis.get(self.prefix_user.format(userId))
             user.initWithJson(userStr)
+            user.session_key = session
+            self.db_redis.set(self.prefix_user.format(userId), user.toJson())
             res = user
         return res
 
