@@ -35,10 +35,7 @@ class User():
     def toJson(self):
         data = {}
         for k,v in self.__dict__.items():
-            if k == "uname":
-                data[k] = v.encode("utf-8")
-            else:
-                data[k] = v
+            data[k] = v
         return json.dumps(data)
 
     def setUserInfo(self, jsonStr):
